@@ -61,6 +61,7 @@
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
             border: 2px solid #ddd;
+            position: relative;
         }
         
         .tipper-box:hover {
@@ -93,6 +94,27 @@
             color: #27ae60;
         }
         
+        .progress-container {
+            margin-top: 10px;
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            color: #7f8c8d;
+        }
+        
         .modal {
             display: none;
             position: fixed;
@@ -110,8 +132,8 @@
             margin: 40px auto;
             padding: 30px;
             border-radius: 15px;
-            width: 90%;
-            max-width: 1000px;
+            width: 95%;
+            max-width: 1400px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
             position: relative;
         }
@@ -136,100 +158,6 @@
             color: #2c3e50;
             border-bottom: 2px solid #eee;
             padding-bottom: 15px;
-        }
-        
-        .tyre-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .tyre-position {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-        
-        .tyre-position:hover {
-            background: #e8f4fc;
-            border-color: #3498db;
-        }
-        
-        .tyre-position.active {
-            background: #d6eaf8;
-            border-color: #2980b9;
-            box-shadow: 0 0 0 2px #3498db;
-        }
-        
-        .tyre-details {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-        
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .btn-primary {
-            background-color: #3498db;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: #2980b9;
-        }
-        
-        .btn-success {
-            background-color: #27ae60;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background-color: #219653;
-        }
-        
-        .btn-danger {
-            background-color: #e74c3c;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background-color: #c0392b;
         }
         
         .summary-bar {
@@ -270,22 +198,107 @@
             margin-top: 20px;
         }
         
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Spreadsheet style */
+        .spreadsheet-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        
+        .spreadsheet {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        
+        .spreadsheet th, .spreadsheet td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .spreadsheet th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+            font-weight: bold;
+        }
+        
+        .spreadsheet tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .spreadsheet tr:hover {
+            background-color: #f1f9ff;
+        }
+        
+        .spreadsheet input, .spreadsheet select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .spreadsheet input:focus, .spreadsheet select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+        
+        .tyre-position {
+            font-weight: bold;
+            background-color: #e8f4fc;
+        }
+        
+        .save-all-btn {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
         @media (max-width: 992px) {
             .tippers-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .tyre-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
         
         @media (max-width: 768px) {
             .tippers-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .tyre-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
             
@@ -296,10 +309,6 @@
         
         @media (max-width: 480px) {
             .tippers-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .tyre-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -349,65 +358,29 @@
             <div class="inspection-form">
                 <h2>Tyre Inspection for <span id="current-tipper"></span></h2>
                 
-                <div class="tyre-grid">
-                    <!-- Tyre positions will be generated by JavaScript -->
+                <div class="spreadsheet-container">
+                    <table class="spreadsheet">
+                        <thead>
+                            <tr>
+                                <th>Tyre Position</th>
+                                <th>Tread Depth (mm)</th>
+                                <th>Valve Condition</th>
+                                <th>Tyre Damage</th>
+                                <th>Cracks</th>
+                                <th>Punctures</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be generated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
                 
-                <div class="tyre-details">
-                    <h3>Inspection Details for <span id="current-tyre"></span></h3>
-                    
-                    <div class="form-group">
-                        <label for="tread-depth">Tread Depth (mm)</label>
-                        <input type="number" id="tread-depth" min="0" max="30" step="0.1">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="valve-condition">Valve Condition</label>
-                        <select id="valve-condition">
-                            <option value="">Select Condition</option>
-                            <option value="good">Good</option>
-                            <option value="fair">Fair</option>
-                            <option value="poor">Poor</option>
-                            <option value="replace">Need Replacement</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="tyre-damage">Tyre Damage</label>
-                        <select id="tyre-damage">
-                            <option value="">Select Damage Status</option>
-                            <option value="none">No Damage</option>
-                            <option value="minor">Minor Damage</option>
-                            <option value="major">Major Damage</option>
-                            <option value="replace">Need Replacement</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="cracks">Any Cracks?</label>
-                        <select id="cracks">
-                            <option value="">Select</option>
-                            <option value="no">No Cracks</option>
-                            <option value="minor">Minor Cracks</option>
-                            <option value="major">Major Cracks</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="punctures">More than 3 Punctures?</label>
-                        <select id="punctures">
-                            <option value="">Select</option>
-                            <option value="no">No</option>
-                            <option value="yes">Yes</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="remarks">Remarks</label>
-                        <textarea id="remarks" placeholder="Add any additional remarks here..."></textarea>
-                    </div>
-                    
-                    <button class="btn btn-success" id="save-tyre-btn">Save Tyre Inspection</button>
+                <div class="save-all-btn">
+                    <button class="btn btn-success" id="save-all-btn">
+                        <i class="fas fa-save"></i> Save All Inspections
+                    </button>
                 </div>
             </div>
         </div>
@@ -430,18 +403,17 @@
         // Initialize inspection data
         let inspectionData = {};
         
-        // Current selected tipper and tyre
+        // Current selected tipper
         let currentTipper = null;
-        let currentTyre = null;
         
         // DOM Elements
         const tippersGrid = document.querySelector('.tippers-grid');
-        const tyreGrid = document.querySelector('.tyre-grid');
         const inspectionModal = document.getElementById('inspectionModal');
         const currentTipperElement = document.getElementById('current-tipper');
-        const currentTyreElement = document.getElementById('current-tyre');
         const closeModal = document.querySelector('.close');
         const requisitionBtn = document.getElementById('requisition-btn');
+        const spreadsheetBody = document.querySelector('.spreadsheet tbody');
+        const saveAllBtn = document.getElementById('save-all-btn');
         
         // Initialize the application
         function init() {
@@ -449,39 +421,67 @@
             setupEventListeners();
         }
         
-        // Render tipper boxes
+        // Render tipper boxes with completion status
         function renderTippers() {
             tippersGrid.innerHTML = '';
             
             tippers.forEach(tipper => {
-                const status = Math.random() > 0.3 ? 'completed' : 'pending';
+                // Calculate completion percentage
+                const completedCount = inspectionData[tipper] ? Object.keys(inspectionData[tipper]).length : 0;
+                const completionPercentage = Math.round((completedCount / tyrePositions.length) * 100);
+                const status = completionPercentage === 100 ? 'completed' : 'pending';
                 
                 const tipperBox = document.createElement('div');
                 tipperBox.className = 'tipper-box';
                 tipperBox.innerHTML = `
                     <div class="tipper-id">${tipper}</div>
                     <div class="status status-${status}">
-                        ${status === 'completed' ? 'Completed' : 'Pending'}
+                        ${status === 'completed' ? 'Completed' : `${completionPercentage}% Complete`}
                     </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: ${completionPercentage}%"></div>
+                    </div>
+                    <div class="progress-text">${completedCount}/${tyrePositions.length} tyres inspected</div>
                 `;
                 
                 tipperBox.addEventListener('click', () => openInspectionModal(tipper));
                 tippersGrid.appendChild(tipperBox);
             });
+            
+            // Update summary counts
+            updateSummaryCounts();
         }
         
-        // Render tyre positions
-        function renderTyrePositions() {
-            tyreGrid.innerHTML = '';
+        // Update summary counts
+        function updateSummaryCounts() {
+            let pendingInspections = 0;
+            let completedInspections = 0;
+            let tyresBelowTread = 0;
             
-            tyrePositions.forEach(position => {
-                const tyreElement = document.createElement('div');
-                tyreElement.className = 'tyre-position';
-                tyreElement.textContent = position;
-                
-                tyreElement.addEventListener('click', () => selectTyre(position));
-                tyreGrid.appendChild(tyreElement);
+            tippers.forEach(tipper => {
+                if (inspectionData[tipper]) {
+                    const completedCount = Object.keys(inspectionData[tipper]).length;
+                    if (completedCount === tyrePositions.length) {
+                        completedInspections++;
+                    } else {
+                        pendingInspections++;
+                    }
+                    
+                    // Count tyres with tread depth below 10
+                    Object.values(inspectionData[tipper]).forEach(tyre => {
+                        if (tyre.treadDepth && parseFloat(tyre.treadDepth) < 10) {
+                            tyresBelowTread++;
+                        }
+                    });
+                } else {
+                    pendingInspections++;
+                }
             });
+            
+            // Update the UI (this would need elements with appropriate IDs)
+            document.querySelectorAll('.summary-value')[0].textContent = tyresBelowTread;
+            document.querySelectorAll('.summary-value')[1].textContent = pendingInspections;
+            document.querySelectorAll('.summary-value')[2].textContent = completedInspections;
         }
         
         // Setup event listeners
@@ -496,7 +496,7 @@
                 }
             });
             
-            document.getElementById('save-tyre-btn').addEventListener('click', saveTyreInspection);
+            saveAllBtn.addEventListener('click', saveAllInspections);
             
             requisitionBtn.addEventListener('click', () => {
                 alert('Requisition sent to manager successfully!');
@@ -513,93 +513,95 @@
                 inspectionData[tipper] = {};
             }
             
-            renderTyrePositions();
+            renderSpreadsheet();
             inspectionModal.style.display = 'block';
-            
-            // Reset form
-            document.getElementById('tread-depth').value = '';
-            document.getElementById('valve-condition').value = '';
-            document.getElementById('tyre-damage').value = '';
-            document.getElementById('cracks').value = '';
-            document.getElementById('punctures').value = '';
-            document.getElementById('remarks').value = '';
-            
-            // Clear any selected tyre
-            currentTyre = null;
-            currentTyreElement.textContent = '';
         }
         
-        // Select a tyre for inspection
-        function selectTyre(position) {
-            currentTyre = position;
-            currentTyreElement.textContent = position;
+        // Render spreadsheet for the selected tipper
+        function renderSpreadsheet() {
+            spreadsheetBody.innerHTML = '';
             
-            // Remove active class from all tyre positions
-            document.querySelectorAll('.tyre-position').forEach(el => {
-                el.classList.remove('active');
+            tyrePositions.forEach(position => {
+                const row = document.createElement('tr');
+                
+                // Get existing data if available
+                const existingData = inspectionData[currentTipper] && inspectionData[currentTipper][position] 
+                    ? inspectionData[currentTipper][position] 
+                    : {};
+                
+                row.innerHTML = `
+                    <td class="tyre-position">${position}</td>
+                    <td>
+                        <input type="number" min="0" max="30" step="0.1" 
+                               value="${existingData.treadDepth || ''}" 
+                               data-position="${position}" data-field="treadDepth">
+                    </td>
+                    <td>
+                        <select data-position="${position}" data-field="valveCondition">
+                            <option value="">Select Condition</option>
+                            <option value="good" ${existingData.valveCondition === 'good' ? 'selected' : ''}>Good</option>
+                            <option value="fair" ${existingData.valveCondition === 'fair' ? 'selected' : ''}>Fair</option>
+                            <option value="poor" ${existingData.valveCondition === 'poor' ? 'selected' : ''}>Poor</option>
+                            <option value="replace" ${existingData.valveCondition === 'replace' ? 'selected' : ''}>Need Replacement</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select data-position="${position}" data-field="tyreDamage">
+                            <option value="">Select Damage Status</option>
+                            <option value="none" ${existingData.tyreDamage === 'none' ? 'selected' : ''}>No Damage</option>
+                            <option value="minor" ${existingData.tyreDamage === 'minor' ? 'selected' : ''}>Minor Damage</option>
+                            <option value="major" ${existingData.tyreDamage === 'major' ? 'selected' : ''}>Major Damage</option>
+                            <option value="replace" ${existingData.tyreDamage === 'replace' ? 'selected' : ''}>Need Replacement</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select data-position="${position}" data-field="cracks">
+                            <option value="">Select</option>
+                            <option value="no" ${existingData.cracks === 'no' ? 'selected' : ''}>No Cracks</option>
+                            <option value="minor" ${existingData.cracks === 'minor' ? 'selected' : ''}>Minor Cracks</option>
+                            <option value="major" ${existingData.cracks === 'major' ? 'selected' : ''}>Major Cracks</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select data-position="${position}" data-field="punctures">
+                            <option value="">Select</option>
+                            <option value="no" ${existingData.punctures === 'no' ? 'selected' : ''}>No</option>
+                            <option value="yes" ${existingData.punctures === 'yes' ? 'selected' : ''}>Yes</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" value="${existingData.remarks || ''}" 
+                               data-position="${position}" data-field="remarks" 
+                               placeholder="Add remarks">
+                    </td>
+                `;
+                
+                spreadsheetBody.appendChild(row);
             });
+        }
+        
+        // Save all inspections for the current tipper
+        function saveAllInspections() {
+            const inputs = spreadsheetBody.querySelectorAll('input, select');
             
-            // Add active class to selected tyre
-            document.querySelectorAll('.tyre-position').forEach(el => {
-                if (el.textContent === position) {
-                    el.classList.add('active');
+            inputs.forEach(input => {
+                const position = input.getAttribute('data-position');
+                const field = input.getAttribute('data-field');
+                const value = input.value;
+                
+                // Initialize position data if not exists
+                if (!inspectionData[currentTipper][position]) {
+                    inspectionData[currentTipper][position] = {};
                 }
+                
+                // Save data
+                inspectionData[currentTipper][position][field] = value;
             });
             
-            // Load existing data if available
-            if (inspectionData[currentTipper] && inspectionData[currentTipper][position]) {
-                const data = inspectionData[currentTipper][position];
-                document.getElementById('tread-depth').value = data.treadDepth || '';
-                document.getElementById('valve-condition').value = data.valveCondition || '';
-                document.getElementById('tyre-damage').value = data.tyreDamage || '';
-                document.getElementById('cracks').value = data.cracks || '';
-                document.getElementById('punctures').value = data.punctures || '';
-                document.getElementById('remarks').value = data.remarks || '';
-            } else {
-                // Reset form if no data
-                document.getElementById('tread-depth').value = '';
-                document.getElementById('valve-condition').value = '';
-                document.getElementById('tyre-damage').value = '';
-                document.getElementById('cracks').value = '';
-                document.getElementById('punctures').value = '';
-                document.getElementById('remarks').value = '';
-            }
-        }
-        
-        // Save tyre inspection data
-        function saveTyreInspection() {
-            if (!currentTyre) {
-                alert('Please select a tyre position first.');
-                return;
-            }
+            alert(`All inspection data saved for ${currentTipper}`);
             
-            // Initialize tipper data if not exists
-            if (!inspectionData[currentTipper]) {
-                inspectionData[currentTipper] = {};
-            }
-            
-            // Save data
-            inspectionData[currentTipper][currentTyre] = {
-                treadDepth: document.getElementById('tread-depth').value,
-                valveCondition: document.getElementById('valve-condition').value,
-                tyreDamage: document.getElementById('tyre-damage').value,
-                cracks: document.getElementById('cracks').value,
-                punctures: document.getElementById('punctures').value,
-                remarks: document.getElementById('remarks').value
-            };
-            
-            alert(`Inspection data saved for ${currentTyre} of ${currentTipper}`);
-            
-            // Update the tipper status to completed if all tyres are inspected
-            const inspectedTyres = Object.keys(inspectionData[currentTipper]).length;
-            if (inspectedTyres === tyrePositions.length) {
-                document.querySelectorAll('.tipper-box').forEach(box => {
-                    if (box.querySelector('.tipper-id').textContent === currentTipper) {
-                        box.querySelector('.status').className = 'status status-completed';
-                        box.querySelector('.status').textContent = 'Completed';
-                    }
-                });
-            }
+            // Update the tipper status
+            renderTippers();
         }
         
         // Initialize the app
