@@ -313,6 +313,50 @@
             background-color: #e74c3c;
         }
         
+        /* Image upload styles */
+        .image-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed #ddd;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .upload-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        
+        .upload-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .remove-image {
+            color: #e74c3c;
+            cursor: pointer;
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        
         @media (max-width: 992px) {
             .tippers-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -383,6 +427,7 @@
                                 <th>Tyre Position</th>
                                 <th>Tread Depth (mm)</th>
                                 <th>Overall Condition</th>
+                                <th>Upload Image</th>
                                 <th>Remarks</th>
                             </tr>
                         </thead>
@@ -563,6 +608,15 @@
                 // Add low-tread class if tread depth is below 10
                 const isLowTread = existingData.treadDepth && parseFloat(existingData.treadDepth) < 10;
                 
+                // Create image preview HTML if image exists
+                let imagePreviewHtml = '<div class="image-preview">';
+                if (existingData.image) {
+                    imagePreviewHtml += `<img src="${existingData.image}" alt="Tyre Image">`;
+                } else {
+                    imagePreviewHtml += '<i class="fas fa-camera"></i>';
+                }
+                imagePreviewHtml += '</div>';
+                
                 row.innerHTML = `
                     <td class="tyre-position">${position}</td>
                     <td class="${isLowTread ? 'low-tread' : ''}">
@@ -583,10 +637,33 @@
                             <option value="poor" ${existingData.condition === 'poor' ? 'selected' : ''}>
                                 <span class="status-indicator status-poor"></span> Poor
                             </option>
+                            <option value="crack" ${existingData.condition === 'crack' ? 'selected' : ''}>
+                                <i class="fas fa-exclamation-triangle"></i> Crack
+                            </option>
+                            <option value="damage" ${existingData.condition === 'damage' ? 'selected' : ''}>
+                                <i class="fas fa-exclamation-triangle"></i> Damage
+                            </option>
+                            <option value="puncture" ${existingData.condition === 'puncture' ? 'selected' : ''}>
+                                <i class="fas fa-exclamation-triangle"></i> Puncture
+                            </option>
+                            <option value="wear" ${existingData.condition === 'wear' ? 'selected' : ''}>
+                                <i class="fas fa-exclamation-triangle"></i> Uneven Wear
+                            </option>
                             <option value="replace" ${existingData.condition === 'replace' ? 'selected' : ''}>
                                 <i class="fas fa-exclamation-triangle"></i> Need Replacement
                             </option>
                         </select>
+                    </td>
+                    <td>
+                        <div class="image-upload-container">
+                            ${imagePreviewHtml}
+                            <label class="upload-btn">
+                                <i class="fas fa-upload"></i> Upload
+                                <input type="file" accept="image/*" style="display: none;" 
+                                       data-position="${position}" class="image-upload">
+                            </label>
+                            ${existingData.image ? '<div class="remove-image" data-position="' + position + '">Remove</div>' : ''}
+                        </div>
                     </td>
                     <td>
                         <input type="text" value="${existingData.remarks || ''}" 
@@ -597,6 +674,70 @@
                 
                 spreadsheetBody.appendChild(row);
             });
+            
+            // Add event listeners for image uploads
+            document.querySelectorAll('.image-upload').forEach(input => {
+                input.addEventListener('change', handleImageUpload);
+            });
+            
+            // Add event listeners for remove image buttons
+            document.querySelectorAll('.remove-image').forEach(button => {
+                button.addEventListener('click', removeImage);
+            });
+        }
+        
+        // Handle image upload
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            const position = event.target.getAttribute('data-position');
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Initialize position data if not exists
+                    if (!inspectionData[currentTipper][position]) {
+                        inspectionData[currentTipper][position] = {};
+                    }
+                    
+                    // Save image data
+                    inspectionData[currentTipper][position].image = e.target.result;
+                    
+                    // Update the preview
+                    const previewContainer = event.target.closest('.image-upload-container');
+                    const preview = previewContainer.querySelector('.image-preview');
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Tyre Image">`;
+                    
+                    // Add remove button if not exists
+                    if (!previewContainer.querySelector('.remove-image')) {
+                        const removeBtn = document.createElement('div');
+                        removeBtn.className = 'remove-image';
+                        removeBtn.setAttribute('data-position', position);
+                        removeBtn.textContent = 'Remove';
+                        removeBtn.addEventListener('click', removeImage);
+                        previewContainer.appendChild(removeBtn);
+                    }
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Remove image
+        function removeImage(event) {
+            const position = event.target.getAttribute('data-position');
+            
+            if (inspectionData[currentTipper][position]) {
+                delete inspectionData[currentTipper][position].image;
+                
+                // Update the preview
+                const previewContainer = event.target.closest('.image-upload-container');
+                const preview = previewContainer.querySelector('.image-preview');
+                preview.innerHTML = '<i class="fas fa-camera"></i>';
+                
+                // Remove the remove button
+                event.target.remove();
+            }
         }
         
         // Save all inspections for the current tipper
@@ -613,8 +754,10 @@
                     inspectionData[currentTipper][position] = {};
                 }
                 
-                // Save data
-                inspectionData[currentTipper][position][field] = value;
+                // Save data (except image which is handled separately)
+                if (field !== 'image') {
+                    inspectionData[currentTipper][position][field] = value;
+                }
             });
             
             alert(`All inspection data saved for ${currentTipper}`);
