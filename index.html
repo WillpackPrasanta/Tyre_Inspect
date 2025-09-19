@@ -77,21 +77,19 @@
             margin-bottom: 10px;
         }
         
-        .status {
-            font-size: 0.9rem;
-            padding: 5px 10px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-        
-        .status-pending {
-            background-color: #ffeaa7;
-            color: #d35400;
+        .status-icon {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
         }
         
         .status-completed {
-            background-color: #a3e4d7;
             color: #27ae60;
+        }
+        
+        .status-pending {
+            color: #e74c3c;
         }
         
         .progress-container {
@@ -291,6 +289,30 @@
             text-align: center;
         }
         
+        .low-tread {
+            background-color: #ffcccc;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-good {
+            background-color: #27ae60;
+        }
+        
+        .status-fair {
+            background-color: #f39c12;
+        }
+        
+        .status-poor {
+            background-color: #e74c3c;
+        }
+        
         @media (max-width: 992px) {
             .tippers-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -328,10 +350,6 @@
                     <div class="summary-label">Tyres Below Tread 10</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-value">3</div>
-                    <div class="summary-label">Pending Inspections</div>
-                </div>
-                <div class="summary-item">
                     <div class="summary-value">9</div>
                     <div class="summary-label">Completed Inspections</div>
                 </div>
@@ -364,10 +382,7 @@
                             <tr>
                                 <th>Tyre Position</th>
                                 <th>Tread Depth (mm)</th>
-                                <th>Valve Condition</th>
-                                <th>Tyre Damage</th>
-                                <th>Cracks</th>
-                                <th>Punctures</th>
+                                <th>Overall Condition</th>
                                 <th>Remarks</th>
                             </tr>
                         </thead>
@@ -412,6 +427,7 @@
         const currentTipperElement = document.getElementById('current-tipper');
         const closeModal = document.querySelector('.close');
         const requisitionBtn = document.getElementById('requisition-btn');
+        const exportBtn = document.getElementById('export-btn');
         const spreadsheetBody = document.querySelector('.spreadsheet tbody');
         const saveAllBtn = document.getElementById('save-all-btn');
         
@@ -428,20 +444,18 @@
             tippers.forEach(tipper => {
                 // Calculate completion percentage
                 const completedCount = inspectionData[tipper] ? Object.keys(inspectionData[tipper]).length : 0;
-                const completionPercentage = Math.round((completedCount / tyrePositions.length) * 100);
-                const status = completionPercentage === 100 ? 'completed' : 'pending';
+                const isComplete = completedCount === tyrePositions.length;
                 
                 const tipperBox = document.createElement('div');
                 tipperBox.className = 'tipper-box';
                 tipperBox.innerHTML = `
+                    <div class="status-icon ${isComplete ? 'status-completed' : 'status-pending'}">
+                        <i class="fas ${isComplete ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                    </div>
                     <div class="tipper-id">${tipper}</div>
-                    <div class="status status-${status}">
-                        ${status === 'completed' ? 'Completed' : `${completionPercentage}% Complete`}
-                    </div>
                     <div class="progress-container">
-                        <div class="progress-bar" style="width: ${completionPercentage}%"></div>
+                        <div class="progress-bar" style="width: ${isComplete ? 100 : 0}%"></div>
                     </div>
-                    <div class="progress-text">${completedCount}/${tyrePositions.length} tyres inspected</div>
                 `;
                 
                 tipperBox.addEventListener('click', () => openInspectionModal(tipper));
@@ -454,7 +468,6 @@
         
         // Update summary counts
         function updateSummaryCounts() {
-            let pendingInspections = 0;
             let completedInspections = 0;
             let tyresBelowTread = 0;
             
@@ -463,8 +476,6 @@
                     const completedCount = Object.keys(inspectionData[tipper]).length;
                     if (completedCount === tyrePositions.length) {
                         completedInspections++;
-                    } else {
-                        pendingInspections++;
                     }
                     
                     // Count tyres with tread depth below 10
@@ -473,15 +484,12 @@
                             tyresBelowTread++;
                         }
                     });
-                } else {
-                    pendingInspections++;
                 }
             });
             
-            // Update the UI (this would need elements with appropriate IDs)
+            // Update the UI
             document.querySelectorAll('.summary-value')[0].textContent = tyresBelowTread;
-            document.querySelectorAll('.summary-value')[1].textContent = pendingInspections;
-            document.querySelectorAll('.summary-value')[2].textContent = completedInspections;
+            document.querySelectorAll('.summary-value')[1].textContent = completedInspections;
         }
         
         // Setup event listeners
@@ -500,6 +508,29 @@
             
             requisitionBtn.addEventListener('click', () => {
                 alert('Requisition sent to manager successfully!');
+            });
+            
+            exportBtn.addEventListener('click', () => {
+                // Create a CSV string
+                let csvContent = "Tipper ID,Tyre Position,Tread Depth,Overall Condition,Remarks\n";
+                
+                for (const tipperId in inspectionData) {
+                    for (const position in inspectionData[tipperId]) {
+                        const tyre = inspectionData[tipperId][position];
+                        csvContent += `${tipperId},${position},${tyre.treadDepth || ''},${tyre.condition || ''},${tyre.remarks || ''}\n`;
+                    }
+                }
+                
+                // Create download link
+                const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "tyre_inspection_report.csv");
+                document.body.appendChild(link);
+                
+                // Trigger download
+                link.click();
+                document.body.removeChild(link);
             });
         }
         
@@ -529,44 +560,32 @@
                     ? inspectionData[currentTipper][position] 
                     : {};
                 
+                // Add low-tread class if tread depth is below 10
+                const isLowTread = existingData.treadDepth && parseFloat(existingData.treadDepth) < 10;
+                
                 row.innerHTML = `
                     <td class="tyre-position">${position}</td>
-                    <td>
+                    <td class="${isLowTread ? 'low-tread' : ''}">
                         <input type="number" min="0" max="30" step="0.1" 
                                value="${existingData.treadDepth || ''}" 
                                data-position="${position}" data-field="treadDepth">
+                        ${isLowTread ? '<br><small style="color: #e74c3c;">Below 10mm</small>' : ''}
                     </td>
                     <td>
-                        <select data-position="${position}" data-field="valveCondition">
+                        <select data-position="${position}" data-field="condition">
                             <option value="">Select Condition</option>
-                            <option value="good" ${existingData.valveCondition === 'good' ? 'selected' : ''}>Good</option>
-                            <option value="fair" ${existingData.valveCondition === 'fair' ? 'selected' : ''}>Fair</option>
-                            <option value="poor" ${existingData.valveCondition === 'poor' ? 'selected' : ''}>Poor</option>
-                            <option value="replace" ${existingData.valveCondition === 'replace' ? 'selected' : ''}>Need Replacement</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select data-position="${position}" data-field="tyreDamage">
-                            <option value="">Select Damage Status</option>
-                            <option value="none" ${existingData.tyreDamage === 'none' ? 'selected' : ''}>No Damage</option>
-                            <option value="minor" ${existingData.tyreDamage === 'minor' ? 'selected' : ''}>Minor Damage</option>
-                            <option value="major" ${existingData.tyreDamage === 'major' ? 'selected' : ''}>Major Damage</option>
-                            <option value="replace" ${existingData.tyreDamage === 'replace' ? 'selected' : ''}>Need Replacement</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select data-position="${position}" data-field="cracks">
-                            <option value="">Select</option>
-                            <option value="no" ${existingData.cracks === 'no' ? 'selected' : ''}>No Cracks</option>
-                            <option value="minor" ${existingData.cracks === 'minor' ? 'selected' : ''}>Minor Cracks</option>
-                            <option value="major" ${existingData.cracks === 'major' ? 'selected' : ''}>Major Cracks</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select data-position="${position}" data-field="punctures">
-                            <option value="">Select</option>
-                            <option value="no" ${existingData.punctures === 'no' ? 'selected' : ''}>No</option>
-                            <option value="yes" ${existingData.punctures === 'yes' ? 'selected' : ''}>Yes</option>
+                            <option value="good" ${existingData.condition === 'good' ? 'selected' : ''}>
+                                <span class="status-indicator status-good"></span> Good
+                            </option>
+                            <option value="fair" ${existingData.condition === 'fair' ? 'selected' : ''}>
+                                <span class="status-indicator status-fair"></span> Fair
+                            </option>
+                            <option value="poor" ${existingData.condition === 'poor' ? 'selected' : ''}>
+                                <span class="status-indicator status-poor"></span> Poor
+                            </option>
+                            <option value="replace" ${existingData.condition === 'replace' ? 'selected' : ''}>
+                                <i class="fas fa-exclamation-triangle"></i> Need Replacement
+                            </option>
                         </select>
                     </td>
                     <td>
@@ -602,6 +621,7 @@
             
             // Update the tipper status
             renderTippers();
+            inspectionModal.style.display = 'none';
         }
         
         // Initialize the app
